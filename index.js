@@ -1,9 +1,9 @@
-require('dotenv').config()
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const db = require('./database')
+const db = require('./database');
 const app = express();
-var jsonParser = bodyParser.json()
+const jsonParser = bodyParser.json();
 
 // set key 
 app.post('/object', jsonParser, function(req, res) {
@@ -16,21 +16,21 @@ app.get('/object/:key', function(req, res) {
 	if (req.query.timestamp == undefined) {
 		get_latest_value_handler(res, req.params.key);
 	} else {
-		get_latest_value_of_timestamp_handler(res, req.params.key, req.query.timestamp)
+		get_latest_value_of_timestamp_handler(res, req.params.key, req.query.timestamp);
 	}
 });
 
 // handlers
 function set_key_value_handler(res, key, value) {
 	db.tx(t => {
-        return db.none("WITH key_insert AS (INSERT INTO keys (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = $2 RETURNING id) INSERT INTO history_values VALUES ((select id from key_insert), $2)", [key, value]);
-    })
-    .then(() => {
-        res.end();
-    })
-    .catch(error => {
-        server_error_handler(res, error)
-    });
+			return db.none('WITH key_insert AS (INSERT INTO keys (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = $2 RETURNING id) INSERT INTO history_values VALUES ((select id from key_insert), $2)', [key, value]);
+		})
+		.then(() => {
+			res.end();
+		})
+		.catch(error => {
+			server_error_handler(res, error);
+		});
 }
 
 function get_latest_value_handler(res, key) {
@@ -43,7 +43,7 @@ function get_latest_value_handler(res, key) {
 			}
 		})
 		.catch(error => {
-			server_error_handler(res, error)
+			server_error_handler(res, error);
 		});
 }
 
@@ -52,7 +52,7 @@ function get_latest_value_of_timestamp_handler(res, key, timestamp) {
 			return t.oneOrNone('SELECT id from keys where key = $1', key)
 				.then(result => {
 					if (result) {
-						return t.oneOrNone('SELECT value from history_values where key_id = $1 and extract(epoch from timestamp) < $2 ORDER BY timestamp DESC limit 1', [result.id, timestamp])
+						return t.oneOrNone('SELECT value from history_values where key_id = $1 and extract(epoch from timestamp) < $2 ORDER BY timestamp DESC limit 1', [result.id, timestamp]);
 					} else {
 						not_found_handler(res);
 					}
@@ -66,7 +66,7 @@ function get_latest_value_of_timestamp_handler(res, key, timestamp) {
 			}
 		})
 		.catch(error => {
-			server_error_handler(res, error)
+			server_error_handler(res, error);
 		});
 }
 
@@ -83,9 +83,9 @@ function server_error_handler(res, error) {
 	});
 }
 
-var port = process.env.PORT || 3000
+var port = process.env.PORT || 3000;
 var server = app.listen(port, () => {
-	console.log('valut-kv start listening on port ' + port + '.....')
+	console.log('valut-kv start listening on port ' + port + '.....');
 });
 
-module.exports = server
+module.exports = server;

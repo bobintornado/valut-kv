@@ -51,6 +51,8 @@ Store all values with timestamp in a SQL database, use timestamp as query filter
 
 ### App
 
+Install and config node to v6.11.0.
+
 Use `touch .env` to create .env file.
 
 Put something like following setup into the .env file
