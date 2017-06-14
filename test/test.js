@@ -45,7 +45,6 @@ describe('Get value', function() {
 				agent.get('/object/k')
 					.end(function(err, res) {
 						res.status.should.equal(200);
-						res.text.should.equal('v');
 						done();
 					});
 			})
@@ -76,7 +75,6 @@ describe('Get value with timestamp', function() {
 								})
 								.end(function(err, res) {
 									res.status.should.equal(200);
-									res.text.should.equal('v1');
 									done();
 								});
 						});

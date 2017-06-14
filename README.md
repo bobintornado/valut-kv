@@ -4,12 +4,21 @@ A time-based version controlled key-value store backed by PostgreSQL.
 
 ## Demo
 
-https://ancient-falls-87896.herokuapp.com/
+URL: https://ancient-falls-87896.herokuapp.com/
 
 ```
 curl -X POST -H "Content-Type: application/json"  https://ancient-falls-87896.herokuapp.com/object --data '{"mykey": "value3"}'
 curl https://ancient-falls-87896.herokuapp.com/object/mykey
 curl https://ancient-falls-87896.herokuapp.com/object/mykey\?timestamp\=1497200200
+```
+
+### Sample Response
+```
+{
+  "key": "mykey",
+  "value": "value4",
+  "timestamp": 1497434025
+}
 ```
 
 ## Requirements
